@@ -1,0 +1,9 @@
+<form>
+  <input type="text" [(ngModel)]="novaPessoa.nome" name="nome" placeholder="Nome">
+  <input type="email" [(ngModel)]="novaPessoa.email" name="email" placeholder="Email">
+  <button type="button" (click)="adicionarPessoa()">Adicionar</button>
+</form>
+
+<ul>
+  <li *ngFor="let p of pessoas">{{ p.nome }} - {{ p.email }}</li>
+</ul>
