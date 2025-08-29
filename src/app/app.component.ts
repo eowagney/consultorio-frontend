@@ -18,7 +18,7 @@ export class AppComponent {
   }
 
   listarPessoas() {
-    this.http.get<any[]>('/pessoas')
+    this.http.get<any[]>('http://localhost:8080/pessoas')
       .subscribe({
         next: data => this.pessoas = data,
         error: err => console.error('Erro ao listar pessoas', err)
@@ -26,12 +26,12 @@ export class AppComponent {
   }
 
   cadastrarPessoa() {
-    if (!this.novaPessoa.nome || !this.novaPessoa.idade) {
+    if (!this.novaPessoa.nome || !this.novaPessoa.idade || !this.novaPessoa.email) {
       alert('Preencha nome e idade!');
       return;
     }
 
-    this.http.post('/pessoas', this.novaPessoa)
+    this.http.post('http://localhost:8080/pessoas', this.novaPessoa)
       .subscribe({
         next: () => {
           this.novaPessoa = {};
