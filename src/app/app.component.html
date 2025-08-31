@@ -1,15 +1,87 @@
-<h1>Consultório - Cadastro de Pessoas</h1>
+<mat-sidenav-container class="app-container">
 
-<form (ngSubmit)="cadastrarPessoa()">
-  <input type="text" placeholder="Nome" [(ngModel)]="novaPessoa.nome" name="nome" required>
-  <input type="number" placeholder="Idade" [(ngModel)]="novaPessoa.idade" name="idade" required>
-  <input type="email" placeholder="Email" [(ngModel)]="novaPessoa.email" name="email" required>
-  <button type="submit">Adicionar</button>
-</form>
+  <mat-sidenav mode="side" opened class="sidenav">
+    <h3 class="menu-title">🏥 Consultório</h3>
+    <mat-nav-list>
+      <a mat-list-item routerLink="/adicionar">
+        <mat-icon>person_add</mat-icon>
+        <span>Cadastro</span>
+      </a>
+      <a mat-list-item routerLink="/pessoas">
+        <mat-icon>list</mat-icon>
+        <span>Pacientes</span>
+      </a>
+    </mat-nav-list>
+  </mat-sidenav>
 
-<h2>Lista de Pessoas</h2>
-<ul>
-  <li *ngFor="let p of pessoas">
-    {{ p.id }} - {{ p.nome }} | {{ p.email }} | ({{ p.idade }} anos)
-  </li>
-</ul>
+  <mat-sidenav-content>
+    <mat-toolbar color="primary">
+      <span>Sistema de Gestão</span>
+    </mat-toolbar>
+
+      <div class="content">
+      <router-outlet></router-outlet>
+      <h1>Cadastro de Pacientes</h1>
+
+      <mat-card class="card-form">
+        <form (ngSubmit)="cadastrarPessoa()" class="form-container">
+          <mat-form-field appearance="fill">
+           <mat-label>Nome</mat-label>
+           <input matInput type="text" [(ngModel)]="novaPessoa.nome" name="nome" required>
+          </mat-form-field>
+
+         <mat-form-field appearance="fill">
+            <mat-label>Idade</mat-label>
+           <input matInput type="number" [(ngModel)]="novaPessoa.idade" name="idade" required>
+         </mat-form-field>
+
+         <mat-form-field appearance="fill">
+           <mat-label>Email</mat-label>
+           <input matInput type="email" [(ngModel)]="novaPessoa.email" name="email" required>
+         </mat-form-field>
+
+         <button mat-raised-button color="primary" type="submit">Adicionar</button>
+        </form>
+      </mat-card>
+
+      <h2>Lista de Pacientes</h2>
+        <mat-card>
+          <table mat-table [dataSource]="pessoas" class="mat-elevation-z8">
+
+          <ng-container matColumnDef="id">
+            <th mat-header-cell *matHeaderCellDef> ID </th>
+            <td mat-cell *matCellDef="let p"> {{p.id}} </td>
+         </ng-container>
+
+          <ng-container matColumnDef="nome">
+            <th mat-header-cell *matHeaderCellDef> Nome </th>
+            <td mat-cell *matCellDef="let p"> {{p.nome}} </td>
+         </ng-container>
+
+         <ng-container matColumnDef="email">
+           <th mat-header-cell *matHeaderCellDef> Email </th>
+           <td mat-cell *matCellDef="let p"> {{p.email}} </td>
+         </ng-container>
+
+        <ng-container matColumnDef="idade">
+         <th mat-header-cell *matHeaderCellDef> Idade </th>
+         <td mat-cell *matCellDef="let p"> {{p.idade}} anos </td>
+        </ng-container>
+
+         <tr mat-header-row *matHeaderRowDef="['id','nome','email','idade']"></tr>
+         <tr mat-row *matRowDef="let row; columns: ['id','nome','email','idade'];"></tr>
+      </table>
+  </mat-card>
+
+    </div>
+  </mat-sidenav-content>
+</mat-sidenav-container>
+
+
+
+
+
+
+
+
+
