@@ -11,15 +11,18 @@ import { MatInputModule } from '@angular/material/input';
 import { MatTableModule } from '@angular/material/table';
 import { MatListModule } from '@angular/material/list';
 import { MatToolbarModule } from '@angular/material/toolbar';
-import { RouterOutlet } from '@angular/router';
 import { MatIconModule } from '@angular/material/icon';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatNativeDateModule } from '@angular/material/core';
 import { ReactiveFormsModule } from '@angular/forms';
 import { MatStepperModule } from '@angular/material/stepper';
 
+
+
 @Component({
   selector: 'app-root',
+  templateUrl: './app.component.html',
+  styleUrls: ['./app.component.scss'],
   standalone: true,
   imports: [
     CommonModule,
@@ -34,18 +37,20 @@ import { MatStepperModule } from '@angular/material/stepper';
     MatSidenavModule,
     MatListModule,
     MatToolbarModule,
-    RouterOutlet,
     MatIconModule,
     MatDatepickerModule,
     MatNativeDateModule,
     ReactiveFormsModule,
     MatStepperModule
 ],
-  templateUrl: './app.component.html',
 })
 export class AppComponent {
+editarPessoa(_t133: any) {
+throw new Error('Method not implemented.');
+}
+  
   pessoas: any[] = [];
-  novaPessoa: any = {};
+  novaPessoa: any = { nome: '', idade: 0, email: '' };
   
 Menu: MatMenuPanel<any> | null | undefined;
 formGroup: FormGroup<any> | undefined;
@@ -54,28 +59,24 @@ formGroup: FormGroup<any> | undefined;
     this.listarPessoas();
   }
 
-  listarPessoas() {
-    this.http.get<any[]>('http://localhost:8080/pessoas')
-      .subscribe({
-        next: data => this.pessoas = data,
-        error: err => console.error('Erro ao listar pessoas', err)
-      });
+   listarPessoas() {
+    this.http.get<any[]>('http://localhost:8080/pessoas').subscribe(dados => {
+      this.pessoas = dados;
+    });
   }
 
   cadastrarPessoa() {
-    if (!this.novaPessoa.nome || !this.novaPessoa.idade || !this.novaPessoa.email) {
-      alert('Preencha nome e idade!');
-      return;
-    }
+    this.http.post('http://localhost:8080/pessoas', this.novaPessoa).subscribe(() => {
+      this.novaPessoa = { nome: '', idade: 0, email: '' };
+      this.listarPessoas();
+    });
+  }
 
-    this.http.post('http://localhost:8080/pessoas', this.novaPessoa)
-      .subscribe({
-        next: () => {
-          this.novaPessoa = {};
-          this.listarPessoas();
-        },
-        error: err => console.error('Erro ao cadastrar pessoa', err)
-      });
+  excluirPessoa(id: number) {
+    if (confirm('Tem certeza que deseja excluir este paciente?')) {
+      this.http.delete(`http://localhost:8080/pessoas/${id}`)
+        .subscribe(() => this.listarPessoas());
+    }
   }
 }
 
